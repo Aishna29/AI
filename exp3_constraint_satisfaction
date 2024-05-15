@@ -1,0 +1,25 @@
+import itertools
+
+def solve_cryptarithmetic(puzzle):
+    unique_chars = set(char for word in puzzle for char in word if char.isalpha())
+    if len(unique_chars) > 10:
+        return "Invalid puzzle: More than 10 unique letters"
+    
+    for perm in itertools.permutations(range(10), len(unique_chars)):
+        mapping = dict(zip(unique_chars, perm))
+        
+        # Ensure no word starts with a zero
+        if all(mapping[word[0]] != 0 for word in puzzle if len(word) > 1):
+            # Create the equation to evaluate
+            equation = ''.join(str(mapping[char]) if char.isalpha() else char for char in ''.join(puzzle))
+            
+            # Evaluate the equation
+            if eval(equation):
+                return {char: mapping[char] for char in unique_chars}
+
+    return "No solution found"
+
+# Example usage
+puzzle = ["SEND", "MORE", "MONEY"]
+solution = solve_cryptarithmetic(puzzle)
+print(solution)
