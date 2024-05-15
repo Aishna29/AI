@@ -1,0 +1,44 @@
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import matplotlib.pyplot as plt
+
+# Download VADER lexicon
+nltk.download('vader_lexicon')
+
+# Initialize VADER sentiment analyzer
+sid = SentimentIntensityAnalyzer()
+
+def analyze_sentiment(text):
+    """
+    Analyze sentiment of the given text using VADER sentiment analyzer.
+    """
+    # Get sentiment scores
+    sentiment_scores = sid.polarity_scores(text)
+    
+    # Determine sentiment label based on compound score
+    if sentiment_scores['compound'] >= 0.05:
+        sentiment = "Positive"
+    elif sentiment_scores['compound'] <= -0.05:
+        sentiment = "Negative"
+    else:
+        sentiment = "Neutral"
+    
+    return sentiment, sentiment_scores
+
+# Example text
+example_text = "I love this product! It's amazing."
+
+# Analyze sentiment
+result, scores = analyze_sentiment(example_text)
+print("Sentiment:", result)
+print("Sentiment Scores:", scores)
+
+# Plot sentiment scores
+labels = ['Positive', 'Neutral', 'Negative']
+values = [scores['pos'], scores['neu'], scores['neg']]
+
+plt.bar(labels, values, color=['green', 'yellow', 'red'])
+plt.xlabel('Sentiment')
+plt.ylabel('Score')
+plt.title('Sentiment Analysis')
+plt.show()

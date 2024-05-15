@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from keras.models import Sequential
+from keras.layers import Dense
+
+# Generate dataset
+X, y = make_blobs(n_samples=600, centers=1)
+
+# Define the neural network model
+model = Sequential()
+model.add(Dense(1, input_dim=1))  # Add a dense layer with one unit
+
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+
+# Fit the model
+model.fit(X[:, 0], X[:, 1], epochs=50, batch_size=32)
+
+# Plot the dataset and neural network predictions
+plt.scatter(X[:, 0], X[:, 1])
+plt.plot(X[:, 0], model.predict(X[:, 0]), color='red')
+
+plt.show()
